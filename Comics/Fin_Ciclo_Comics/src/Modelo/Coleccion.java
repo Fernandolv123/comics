@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class Coleccion implements Serializable{
     int id;
     String nombre;
-
+    
     public Coleccion() {
     }
 

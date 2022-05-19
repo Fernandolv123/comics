@@ -1,5 +1,10 @@
 package VersionFinal;
 
+import BD.Conexion;
+import Modelo.Coleccion;
+import Modelo.Comic;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,8 +12,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -20,16 +27,13 @@ import java.util.logging.Logger;
  *
  * @author fernandolv
  */
-public class HiloServidorTrabajo extends Thread {
+public class HiloServidorTrabajo extends Thread implements Serializable {
 
     Socket socketCliente;
 
-    
-
     HiloServidorTrabajo(Socket skCliente) {
         this.socketCliente = skCliente;
-     
-    
+
     }
 
     @Override
@@ -41,26 +45,38 @@ public class HiloServidorTrabajo extends Thread {
             while (!peticion.equalsIgnoreCase("Salir")) {
                 //Creamos los flujos
                 InputStream aux = socketCliente.getInputStream();
-                
+
                 //DataInputStream flujo_entrada = new DataInputStream(aux);              
-                
                 ObjectInputStream flujo_entrada = new ObjectInputStream(aux);
-                
+
                 OutputStream out = socketCliente.getOutputStream();
-                
+
                 //DataOutputStream flujo_salida = new DataOutputStream(out);
-                
                 ObjectOutputStream flujo_salida = new ObjectOutputStream(out);
                 //flujo_salida.writeObject(out);
-                
-                
+
                 peticion = flujo_entrada.readObject().toString();
-                
+                ArrayList<Comic> listaC = new ArrayList();
                 switch (peticion) {
                     case "getComics":
-                        //flujo_entrada.readObject();
+                        String consulta = flujo_entrada.readObject().toString();
+                        System.out.println(consulta);
+                        try {
+                            PreparedStatement sentencia = Conexion.getConnection().prepareStatement(consulta);
+                            ResultSet resul = sentencia.executeQuery();
+                            while (resul.next()) {
+                                listaC.add(new Comic(resul.getString(2), resul.getInt(6),resul.getString(4),resul.getString(3),new Coleccion(resul.getInt(7), resul.getString(8)),resul.getString(5)));
+                            }
+                            Conexion.Close();
+                        } catch (SQLException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        };
+                        flujo_salida.writeObject(listaC);
                         break;
                     case "GetSortedComics":
+
+                        flujo_salida.writeObject(listaC);
                         break;
                     case "":
                         break;
@@ -74,7 +90,7 @@ public class HiloServidorTrabajo extends Thread {
                         break;
                     case "Cuantos":
                         //Atendemos al cliente
-                        flujo_salida.writeUTF("Total clientes conectados: "+ HiloServidor.nc);
+                        flujo_salida.writeUTF("Total clientes conectados: " + HiloServidor.nc);
                         break;
                     case "Salir":
                         HiloServidor.nc--;
@@ -82,24 +98,22 @@ public class HiloServidorTrabajo extends Thread {
                         break;
                     default:
                         break;
-                }   
+                }
                 flujo_salida.flush();
-       
+
             }
 
             // Se cierra la conexión
             socketCliente.close();
-           // Servidor.restarNumClientes();
+            // Servidor.restarNumClientes();
 
         } catch (IOException ex) {
-            
-          
-          // Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+
+            // Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(HiloServidorTrabajo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            
+        } finally {
+
         }
     }
 

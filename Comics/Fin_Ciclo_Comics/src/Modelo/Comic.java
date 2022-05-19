@@ -10,8 +10,7 @@ import java.io.Serializable;
  *
  * @author admin
  */
-public class Comic implements Serializable {
-
+public class Comic implements Serializable{
     String nombre;
     int cantidad;
     String genero;
@@ -70,19 +69,21 @@ public class Comic implements Serializable {
     public void setColection(Coleccion colection) {
         this.colection = colection;
     }
-
-    public String getAutor() {
+    
+    public String getAutor(){
         return autor;
     }
-
-    public void setAutor(String autor) {
+    
+    public void setAutor(String autor){
         this.autor = autor;
     }
 
-    @Override
-    public String toString() {
-        return "Comic [nombre=" + nombre + ", cantidad=" + cantidad + ", genero=" + genero + ", IVN=" + IVN
-                + ", colection=" + colection + ", autor=" + autor + "]";
-    }
-
+	@Override
+	public String toString() {
+		return "Comic [nombre=" + nombre + ", cantidad=" + cantidad + ", genero=" + genero + ", IVN=" + IVN
+				+ ", colection=" + colection + ", autor=" + autor + "]";
+	}
+    
+    
+    
 }

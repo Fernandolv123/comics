@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -17,16 +18,20 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import Modelo.Comic;
+
 /**
  *
  * @author fernandolv
  */
-public class HiloCliente extends Thread {
+public class HiloCliente extends Thread implements Serializable{
 
     Socket socketCliente;
     String orden;
     JTextArea txtaoe;
     JLabel lblcon;
+    String consulta;
+    public static ArrayList<Comic> listaC=new ArrayList<Comic>();
     
 
     public HiloCliente() {
@@ -38,6 +43,12 @@ public class HiloCliente extends Thread {
         this.txtaoe = txtaoe;
         this.lblcon = lblcon;
         
+    }
+    
+    public HiloCliente(Socket socketCliente, String orden, String consulta) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.consulta = consulta;
     }
 
     @Override
@@ -58,7 +69,12 @@ public class HiloCliente extends Thread {
                 
                 //Escribimos la orden que queremos ejecutar
                 salida.writeObject(orden);
-                txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+                salida.writeObject(consulta);
+                listaC =  (ArrayList<Comic>) entrada.readObject();
+                System.out.println(listaC);
+                //System.out.println(entrada.readObject());
+                
+                //txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
               //  opcionsalidaserver = entrada.readUTF();
 
 //                switch (opcionsalidaserver) {
@@ -81,10 +97,11 @@ public class HiloCliente extends Thread {
 //                        break;
 //                }
 
-            } catch (IOException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 try {
-                    lblcon.setText("Desconectado");
-                    txtaoe.setText("No se ha podido conectar");
+                	ex.printStackTrace();
+                    //lblcon.setText("Desconectado");
+                    //txtaoe.setText("No se ha podido conectar");
                     socketCliente.close();
                 } catch (IOException ex1) {
                     Logger.getLogger(HiloCliente.class.getName()).log(Level.SEVERE, null, ex1);

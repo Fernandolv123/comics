@@ -7,11 +7,22 @@ package Vista;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import Vista.Hilos.HiloCliente;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import BD.ComicsDAO;
+import Modelo.Conexion;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  *
@@ -40,8 +51,6 @@ public class Cliente extends javax.swing.JFrame {
     private void initComponents() {
 
         lblconexion = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtaoe = new javax.swing.JTextArea();
         txtpuerto = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -52,10 +61,6 @@ public class Cliente extends javax.swing.JFrame {
 
         lblconexion.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblconexion.setText("jLabel1");
-
-        txtaoe.setColumns(20);
-        txtaoe.setRows(5);
-        jScrollPane1.setViewportView(txtaoe);
 
         txtpuerto.setText("2000");
 
@@ -86,51 +91,76 @@ public class Cliente extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        
+        btnNewButton = new JButton("New button");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		ComicsDAO cdao = new ComicsDAO();
+        		try {
+					cdao.obtenerProductos();
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
+        txtaoe = new javax.swing.JTextArea();
+        
+                txtaoe.setColumns(20);
+                txtaoe.setRows(5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblconexion, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(31, 31, 31)
-                                .addComponent(txtpuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(jButton2)))
-                        .addGap(0, 87, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(jButton3)
-                .addGap(98, 98, 98)
-                .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+        				.addGroup(layout.createSequentialGroup()
+        					.addContainerGap()
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblconexion, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btnNewButton))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(jButton1)
+        							.addGap(31)
+        							.addComponent(txtpuerto, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+        							.addGap(32)
+        							.addComponent(jButton2))
+        						.addGroup(layout.createSequentialGroup()
+        							.addGap(10)
+        							.addComponent(txtaoe, GroupLayout.PREFERRED_SIZE, 325, GroupLayout.PREFERRED_SIZE))))
+        				.addGroup(layout.createSequentialGroup()
+        					.addGap(59)
+        					.addComponent(jButton3)
+        					.addGap(98)
+        					.addComponent(jButton4)))
+        			.addContainerGap(66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(lblconexion)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtpuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap(14, Short.MAX_VALUE))
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addGap(12)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblconexion)
+        				.addComponent(btnNewButton))
+        			.addGap(18)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtpuerto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jButton1)
+        				.addComponent(jButton2))
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
+        			.addComponent(txtaoe, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+        			.addGap(13)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jButton3)
+        				.addComponent(jButton4))
+        			.addContainerGap(14, Short.MAX_VALUE))
         );
+        getContentPane().setLayout(layout);
 
         pack();
         setLocationRelativeTo(null);
@@ -151,6 +181,8 @@ public class Cliente extends javax.swing.JFrame {
             try { 
            //             Nos Conectamos a un Servidor mediante IP+PUERTO
                 socketClient = new Socket("192.168.56.120", Integer.parseInt(txtpuerto.getText()));
+                Conexion.ip = "192.168.56.120";
+                Conexion.puerto = Integer.parseInt(txtpuerto.getText());
 
             } catch (Exception e) {
                 if (e.getClass().getName().equals("java.net.ConnectException")) {
@@ -262,9 +294,8 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblconexion;
     private javax.swing.JTextArea txtaoe;
     private javax.swing.JTextField txtpuerto;
-    // End of variables declaration//GEN-END:variables
+    private JButton btnNewButton;
 }

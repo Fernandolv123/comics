@@ -22,7 +22,7 @@ public class Conexion {
 //	private static ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
 	static Connection Con;
 	static BasicDataSource basicdatasource = new BasicDataSource();
-	private static String BD = "compra_online";
+	private static String BD = "comic_library";
         //private static String IP = "localhost";
 	private static String IP = "192.168.56.120";
 
