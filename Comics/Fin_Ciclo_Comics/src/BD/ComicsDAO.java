@@ -15,11 +15,11 @@ import Modelo.Conexion;
 import Vista.Cliente;
 import Vista.Hilos.HiloCliente;
 
-public class ComicsDAO {
+public class ComicsDAO implements IComicsDAO{
     Socket socketClient;
     HiloCliente hc;
     
-	public ArrayList<Comic> obtenerProductos() throws UnknownHostException, IOException {
+	public ArrayList<Comic> obtenerComics() throws UnknownHostException, IOException {
 		socketClient = new Socket(Conexion.ip,Conexion.puerto);
         if (socketClient == null || !socketClient.isClosed() || !socketClient.isConnected()) {
             hc = new HiloCliente(socketClient, "getComics", "Select * from Comics inner join colecciones on comics.id_coleccion = colecciones.id");
@@ -32,6 +32,15 @@ public class ComicsDAO {
             }
         }
 		return HiloCliente.listaC;
+	}
+
+	public Comic getComic(String valueAt) {
+		for (Comic c : HiloCliente.listaC) {
+			if (c.getIVN().equals(valueAt)) {
+				return c;
+			}
+		}
+		return null;
 	}
 	
 }

@@ -97,7 +97,8 @@ public class Cliente extends javax.swing.JFrame {
         	public void actionPerformed(ActionEvent e) {
         		ComicsDAO cdao = new ComicsDAO();
         		try {
-					cdao.obtenerProductos();
+					TablaComicScreen tcs = new TablaComicScreen();
+					tcs.setVisible(true);
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -105,6 +106,15 @@ public class Cliente extends javax.swing.JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+        		/*try {
+					cdao.obtenerProductos();
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
         	}
         });
         txtaoe = new javax.swing.JTextArea();

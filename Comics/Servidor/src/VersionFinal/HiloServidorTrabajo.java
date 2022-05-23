@@ -65,7 +65,7 @@ public class HiloServidorTrabajo extends Thread implements Serializable {
                             PreparedStatement sentencia = Conexion.getConnection().prepareStatement(consulta);
                             ResultSet resul = sentencia.executeQuery();
                             while (resul.next()) {
-                                listaC.add(new Comic(resul.getString(2), resul.getInt(6),resul.getString(4),resul.getString(3),new Coleccion(resul.getInt(7), resul.getString(8)),resul.getString(5)));
+                                listaC.add(new Comic(resul.getString(2), resul.getInt(6),resul.getString(4),resul.getString(3),new Coleccion(resul.getInt(9), resul.getString(10)),resul.getString(5),resul.getFloat(7),resul.getBytes(8)));
                             }
                             Conexion.Close();
                         } catch (SQLException e) {

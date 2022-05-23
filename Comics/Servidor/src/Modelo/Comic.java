@@ -18,17 +18,21 @@ public class Comic implements Serializable {
     String IVN;
     Coleccion colection;
     String autor;
+    float precio;
+    byte[] img;
 
     public Comic() {
     }
 
-    public Comic(String nombre, int cantidad, String genero, String IVN, Coleccion colection, String autor) {
+    public Comic(String nombre, int cantidad, String genero, String IVN, Coleccion colection, String autor,float precio, byte[] img) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.genero = genero;
         this.IVN = IVN;
         this.colection = colection;
         this.autor = autor;
+        this.precio = precio;
+        this.img = img;
     }
 
     public String getNombre() {
@@ -78,11 +82,28 @@ public class Comic implements Serializable {
     public void setAutor(String autor) {
         this.autor = autor;
     }
+    
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+    
+    public float getPrecio() {
+        return precio;
+    }
+    
+    public void setImg(byte[] img){
+        this.img = img;
+    }
+    
+    public byte[] getImg(){
+        return img;
+    }
 
     @Override
     public String toString() {
-        return "Comic [nombre=" + nombre + ", cantidad=" + cantidad + ", genero=" + genero + ", IVN=" + IVN
-                + ", colection=" + colection + ", autor=" + autor + "]";
+        return "Comic{" + "nombre=" + nombre + ", cantidad=" + cantidad + ", genero=" + genero + ", IVN=" + IVN + ", colection=" + colection + ", autor=" + autor + ", precio=" + precio + ", img=" + img + '}';
     }
 
+    
+    
 }
