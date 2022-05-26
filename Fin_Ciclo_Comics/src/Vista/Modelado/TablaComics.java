@@ -24,9 +24,9 @@ import Modelo.Comic;
  * @author Fernando
  * */
 public class TablaComics extends AbstractTableModel{
-	//private ResourceBundle rb= ResourceBundle.getBundle("Idiomas.idioms");
+	private ResourceBundle rb= ResourceBundle.getBundle("Idiomas.Idioms");
 	private ArrayList<Comic> listacomics=null;
-	String[] columnas = {"IVN","Coleccion","Nombre","Precio","Cantidad","foto" };
+	String[] columnas = {"ISBN",rb.getString("tblNombre"),rb.getString("tblCol"),rb.getString("tblPrecio"),rb.getString("tblCantidad"),rb.getString("tblFoto") };
 	
 	
 	public TablaComics(ArrayList<Comic> listauser) {
@@ -51,7 +51,7 @@ public class TablaComics extends AbstractTableModel{
 	}
 	
 	public Class getColumnClass(int column) {
-		return (getColumnName(column).equals("foto")) ? ImageIcon.class : Object.class;
+		return (getColumnName(column).equals(rb.getString("tblFoto"))) ? ImageIcon.class : Object.class;
     }
 	
 	
@@ -61,11 +61,11 @@ public class TablaComics extends AbstractTableModel{
 			Comic c = listacomics.get(row);
 			switch (col) {
 			case 0:
-				return c.getIVN();
+				return c.getISBN();
 			case 1:
-				return c.getColection().getNombre();
-			case 2:
 				return c.getNombre();
+			case 2:
+				return c.getColection().getNombre();
 			case 3:
 				return c.getPrecio();
 			case 4:
@@ -73,17 +73,6 @@ public class TablaComics extends AbstractTableModel{
 			case 5:
 				Image imagen = new ImageIcon(c.getImg()).getImage().getScaledInstance(124, 124, Image.SCALE_SMOOTH);
 				return new ImageIcon(imagen);
-				
-				/*BufferedImage notevoyadecuirunnombre = new BufferedImage(124,124,BufferedImage.TYPE_INT_RGB);
-				
-				notevoyadecuirunnombre.getGraphics().drawImage(imagen,0,0,null);
-				return notevoyadecuirunnombre.getGraphics();*/
-				/*byte[] bytes = c.getImg();
-				int width = 160;
-				int height = 160;
-				DataBufferByte buffer = new DataBufferByte(bytes, bytes.length);
-				    ColorModel cm = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[]{8, 8, 8}, false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
-				    return new BufferedImage(cm, Raster.createInterleavedRaster(buffer, width, height, width * 3, 3, new int[]{0, 1, 2}, null), false, null);*/
 			default:
 				return null;
 			}

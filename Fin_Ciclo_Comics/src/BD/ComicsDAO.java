@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 import Modelo.Comic;
 import Modelo.Conexion;
-import Vista.Cliente;
+import Vista.LogginScreen;
 import Vista.Hilos.HiloCliente;
 
 public class ComicsDAO implements IComicsDAO{
@@ -28,7 +28,9 @@ public class ComicsDAO implements IComicsDAO{
             try {
                 hc.join();
             } catch (InterruptedException ex) {
-                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            	//System.out.println("ERROR");
+            	ex.printStackTrace();
+                Logger.getLogger(LogginScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 		return HiloCliente.listaC;
@@ -36,7 +38,7 @@ public class ComicsDAO implements IComicsDAO{
 
 	public Comic getComic(String valueAt) {
 		for (Comic c : HiloCliente.listaC) {
-			if (c.getIVN().equals(valueAt)) {
+			if (c.getISBN().equals(valueAt)) {
 				return c;
 			}
 		}
@@ -45,10 +47,8 @@ public class ComicsDAO implements IComicsDAO{
 	
 	public void deleteComic(Comic c) throws InterruptedException, UnknownHostException, IOException {
 		socketClient = new Socket(Conexion.ip,Conexion.puerto);
-		System.out.println(HiloCliente.listaC);
 		HiloCliente.listaC.remove(c);
-		System.out.println(HiloCliente.listaC);
-        hc = new HiloCliente(socketClient, "deleteComic", "delete from comics where ivn=\"" + c.getIVN() + "\"");
+        hc = new HiloCliente(socketClient, "deleteComic", "delete from comics where isbn=\"" + c.getISBN() + "\"");
         hc.start();
         hc.join();
         

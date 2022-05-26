@@ -11,9 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
 
+import Controlador.InfoUserControler;
 import Modelo.Usuario;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
@@ -26,12 +29,24 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class InfoUser extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblSaludo;
+	private ArrayList<JButton> listabotones = new ArrayList<JButton>();
+	private ArrayList<JLabel> listalabels = new ArrayList<JLabel>();
+	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
+	private JButton btnExplorar;
+	private JButton btnCancelar;
+	private JPanel panel_5;
+	private JLabel lblInformes;
 	private JLabel lblNewLabel;
 
 	/**
@@ -40,7 +55,7 @@ public class InfoUser extends JDialog {
 	public static void main(String[] args) {
 		try {
 			Usuario u = new Usuario();
-			InfoUser dialog = new InfoUser(u);
+			InfoUser dialog = new InfoUser();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -51,7 +66,7 @@ public class InfoUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public InfoUser(Usuario u) {
+	public InfoUser() {
 		/*					if (u.getFoto() != null) {
 						Image imagen = new ImageIcon(u.getFoto()).getImage().getScaledInstance(124, 124,
 								Image.SCALE_SMOOTH);
@@ -94,8 +109,8 @@ public class InfoUser extends JDialog {
 						panel_3.setLayout(new BorderLayout(0, 0));
 						{
 							lblNewLabel = new JLabel("");
-							if (u.getFoto() != null) {
-								Image imagen = new ImageIcon(u.getFoto()).getImage().getScaledInstance(84, 84,
+							if (Usuario.miUser().getFoto() != null) {
+								Image imagen = new ImageIcon(Usuario.miUser().getFoto()).getImage().getScaledInstance(84, 84,
 										Image.SCALE_SMOOTH);
 								lblNewLabel.setIcon(new ImageIcon(imagen));
 							}
@@ -107,7 +122,7 @@ public class InfoUser extends JDialog {
 						panel_2.add(panel_3, BorderLayout.CENTER);
 						panel_3.setLayout(new BorderLayout(0, 0));
 						{
-							JLabel lblNewLabel_1 = new JLabel("Ferlorenzovazqeuz@gmail.com");
+							JLabel lblNewLabel_1 = new JLabel(Usuario.miUser().getEmail());
 							panel_3.add(lblNewLabel_1);
 						}
 						{
@@ -117,28 +132,105 @@ public class InfoUser extends JDialog {
 					}
 				}
 			}
+			{
+				JPanel panel_1 = new JPanel();
+				panel.add(panel_1);
+				{
+					panel_5 = new JPanel();
+				}
+				
+				JButton btnNewButton = new JButton("New button");
+				
+				JButton btnNewButton_1 = new JButton("New button");
+				
+				JButton btnNewButton_2 = new JButton("New button");
+				
+				JButton btnNewButton_3 = new JButton("New button");
+				
+				lblInformes = new JLabel("New label");
+				lblInformes.setName("lblInformes");
+				lblInformes.setFont(new Font("Tahoma", Font.PLAIN, 25));
+				lblInformes.setHorizontalAlignment(SwingConstants.CENTER);
+				GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+				gl_panel_1.setHorizontalGroup(
+					gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnNewButton)
+								.addComponent(btnNewButton_1))
+							.addGap(18)
+							.addComponent(lblInformes, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+							.addGap(18)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnNewButton_2, Alignment.TRAILING)
+								.addComponent(btnNewButton_3, Alignment.TRAILING))
+							.addContainerGap())
+				);
+				gl_panel_1.setVerticalGroup(
+					gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+							.addContainerGap(14, Short.MAX_VALUE)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnNewButton_1)
+								.addComponent(btnNewButton_3))
+							.addGap(18)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnNewButton)
+								.addComponent(btnNewButton_2))
+							.addContainerGap())
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblInformes, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+							.addContainerGap())
+				);
+				panel_1.setLayout(gl_panel_1);
+			}
 		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Explorar");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnExplorar = new JButton("Explorar");
+				btnExplorar.setName("btnExplorar");
+				btnExplorar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try { 
+							TablaComicScreen tcs = new TablaComicScreen();
+							tcs.setVisible(true);
+							} catch (UnknownHostException e1) {
+								System.out.println("ERROR");
+							  e1.printStackTrace();
+						  } catch (IOException e1){
+							  JOptionPane.showConfirmDialog(null, rb.getString("JOConexionFallida"),"Error",JOptionPane.CANCEL_OPTION,JOptionPane.ERROR_MESSAGE);
+							  //e1.printStackTrace();
+						  }
+						
+					}
+				});
+				btnExplorar.setActionCommand("OK");
+				buttonPane.add(btnExplorar);
+				getRootPane().setDefaultButton(btnExplorar);
 			}
 			{
-				JButton cancelButton = new JButton("Salir");
-				cancelButton.addActionListener(new ActionListener() {
+				btnCancelar = new JButton("Salir");
+				btnCancelar.setName("btnCancelar");
+				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				btnCancelar.setActionCommand("Cancel");
+				buttonPane.add(btnCancelar);
 			}
 		}
+		listabotones.add(btnCancelar);
+		listabotones.add(btnExplorar);
+		listalabels.add(lblSaludo);
+		listalabels.add(lblInformes);
+		InfoUserControler.traducir(listalabels,listabotones);
 	}
-
 }

@@ -25,6 +25,8 @@ import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -44,6 +46,8 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * Dialogo de Visualización de todos los productos de la base de datos mediante una tabla maestra
@@ -62,6 +66,8 @@ public class TablaComicScreen extends JDialog {
 	private JPanel panel_4;
 	private JPanel panelOculto;
 	private JComboBox cmbCol;
+	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
+
 
 	/**
 	 * Launch the application.
@@ -85,6 +91,15 @@ public class TablaComicScreen extends JDialog {
 	 * @throws UnknownHostException 
 	 */
 	public TablaComicScreen() throws UnknownHostException, IOException {
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				if(HiloCliente.broke) {
+					JOptionPane.showConfirmDialog(null, rb.getString("JOErrorAlConectarBD"),"Error",JOptionPane.CANCEL_OPTION,JOptionPane.ERROR_MESSAGE);
+					dispose();
+				}
+			}
+		});
 		ComicsDAO cdao=new ComicsDAO();
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
@@ -109,15 +124,16 @@ public class TablaComicScreen extends JDialog {
 				infc.setVisible(true);
 			}
 		});
-		btnAnhadirProducto.setName("btnAnhadirProducto");
+		btnAnhadirProducto.setName(rb.getString("btnAnhadirProducto"));
 		panelOculto.add(btnAnhadirProducto);
 
 		panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.NORTH);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
 
-		btnfiltro = new JButton("Filtrar");
+		btnfiltro = new JButton();
 		btnfiltro.setName("btnfiltro");
+		btnfiltro.setText(rb.getString(btnfiltro.getName()));
 		btnfiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//tablaProductos.setModel(new TablaProductos(pDAO.sortProductos(textField.getText())));
@@ -125,7 +141,7 @@ public class TablaComicScreen extends JDialog {
 		});
 		
 		cmbCol = new JComboBox();
-		cmbCol.setModel(new DefaultComboBoxModel(new String[] {"Todos"}));
+		cmbCol.setModel(new DefaultComboBoxModel(new String[] {"*"}));
 		cmbCol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
@@ -137,8 +153,9 @@ public class TablaComicScreen extends JDialog {
 		panel_3 = new JPanel();
 		panel_1.add(panel_3);
 
-		lblfilto = new JLabel("Filtro por nombre");
+		lblfilto = new JLabel();
 		lblfilto.setName("lblfilto");
+		rb.getString(lblfilto.getName());
 		panel_1.add(lblfilto);
 
 		panel_4 = new JPanel();

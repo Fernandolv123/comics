@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import BD.ComicsDAO;
+import BD.UsuariosDAO;
 import Controlador.LogginControlador;
+import Modelo.Comic;
 import Modelo.Conexion;
 import Modelo.Usuario;
 import Vista.Hilos.HiloCliente;
@@ -45,8 +47,8 @@ public class LogginScreen extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtPuerto = new JTextField();
 	private JTextField txtIP = new JTextField();
-	private JTextField textField_3;
-	private JLabel lblconexion;
+	private JTextField txtemail;
+	private JLabel lblConexion;
 	private JLabel lblPuerto;
 	private JLabel lblEmail;
 	private JLabel lblContrasenha;
@@ -57,17 +59,18 @@ public class LogginScreen extends JFrame {
 	private JButton btntest;
 	private JButton btnDesconectar;
 
+	private UsuariosDAO udao = new UsuariosDAO();
 	private Properties prop = new Properties();
 	// private static InputStream inpstr = null;
 	private InputStream inpstr = this.getClass().getClassLoader().getResourceAsStream("./Connexion.properties");
 	Socket socketClient;
 	HiloCliente hc;
 	boolean encendido = false;
-	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.idioms");
+	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
 	private ArrayList<JLabel> listalabels = new ArrayList<JLabel>();
 	private ArrayList<JButton> listabotones = new ArrayList<JButton>();
 	private JButton btnCrearUsuario;
-	private JPasswordField passwordField;
+	private JPasswordField txtpasswd;
 
 	/**
 	 * Launch the application.
@@ -90,6 +93,8 @@ public class LogginScreen extends JFrame {
 	 * Create the frame.
 	 */
 	public LogginScreen() {
+		Usuario.miUser("emailaa", "contraseÒa", null);
+		System.out.println(Usuario.miUser().getEmail());
 		LogginControlador.updateProperties(inpstr,prop,txtIP,txtPuerto);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,7 +112,7 @@ public class LogginScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Locale.setDefault(new Locale("es", "ES"));
 				rb = ResourceBundle.getBundle("Idiomas.Idioms");
-				LogginControlador.traductor(rb, listalabels, listabotones);
+				LogginControlador.traductor(rb, listalabels, listabotones, lblConexion,encendido);
 				setTitle(rb.getString("tituloCliente"));
 				mnIdioma.setText(rb.getString(mnIdioma.getName()));
 				mnitmEspanhol.setText(rb.getString(mnitmEspanhol.getName()));
@@ -123,7 +128,7 @@ public class LogginScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Locale.setDefault(new Locale("gl", "ES"));
 				rb = ResourceBundle.getBundle("Idiomas.Idioms");
-				LogginControlador.traductor(rb, listalabels, listabotones);
+				LogginControlador.traductor(rb, listalabels, listabotones, lblConexion,encendido);
 				setTitle(rb.getString("tituloCliente"));
 				mnIdioma.setText(rb.getString(mnIdioma.getName()));
 				mnitmEspanhol.setText(rb.getString(mnitmEspanhol.getName()));
@@ -139,7 +144,7 @@ public class LogginScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Locale.setDefault(new Locale("en", "GB"));
 				rb = ResourceBundle.getBundle("Idiomas.Idioms");
-				LogginControlador.traductor(rb, listalabels, listabotones);
+				LogginControlador.traductor(rb, listalabels, listabotones, lblConexion, encendido);
 				setTitle(rb.getString("tituloCliente"));
 				mnIdioma.setText(rb.getString(mnIdioma.getName()));
 				mnitmEspanhol.setText(rb.getString(mnitmEspanhol.getName()));
@@ -181,29 +186,28 @@ public class LogginScreen extends JFrame {
 						return;
 					}
 				}
-				// Si lo hemos conectado al menos 1 vez y desconectado volvemos a conectar
-				lblconexion.setText("Conectado");
+				
 				System.out.println(txtIP.getText()+" : ");
 					System.out.println(Integer.parseInt(txtPuerto.getText()));
 				try {
 
-					// Nos Conectamos a un Servidor mediante IP+PUERTO
 					socketClient = new Socket(txtIP.getText(), Integer.parseInt(txtPuerto.getText()));
 					Conexion.ip = txtIP.getText();
 					Conexion.puerto = Integer.parseInt(txtPuerto.getText());
+					encendido = true;
+					lblConexion.setText(rb.getString("lblConexionCon"));
 
 				} catch (Exception ex) {
-					if (e.getClass().getName().equals("java.net.ConnectException")) {
-						// txtaoe.setText("No se ha podido conectar");
-						lblconexion.setText("Desconectado");
-
+					if (ex.getClass().getName().equals("java.net.ConnectException")) {
+						lblConexion.setText(rb.getString("lblConexionDes"));
+						encendido = false;
+						JOptionPane.showMessageDialog(rootPane, rb.getString("JOConexionFallida"), "Error",
+								JOptionPane.ERROR_MESSAGE);
 					}
-
 				}
-
 			}
 		});
-		btntest.setText("Conectar");
+		btntest.setText("Probar Conexi\u00F3n");
 		btntest.setName("btnTest");
 
 		btnDesconectar = new JButton();
@@ -212,23 +216,22 @@ public class LogginScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				if (socketClient == null) {
-					JOptionPane.showMessageDialog(rootPane, "El cliente no est√° conectado", "Error",
+					JOptionPane.showMessageDialog(rootPane, "El cliente no est· conectado", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else if (socketClient.isClosed()) {
-					JOptionPane.showMessageDialog(rootPane, "El cliente ya est√° desconectado", "Error",
+					JOptionPane.showMessageDialog(rootPane, "El cliente ya est· desconectado", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					try {
-						// mando orden salir, cierro conexion y resto num
-						HiloCliente hilo = new HiloCliente(socketClient, "Salir", lblconexion);
+						HiloCliente hilo = new HiloCliente(socketClient, "Salir", lblConexion);
 						hilo.start();
 						hilo.join();
 
 						socketClient.close();
 
-						lblconexion.setText("Desconectado");
+						lblConexion.setText(rb.getString("lblConexionDes"));
+						encendido = false;
 
-						// txtaoe.setText("Saliendo...");
 					} catch (IOException ex) {
 						Logger.getLogger(LogginScreen.class.getName()).log(Level.SEVERE, null, ex);
 					} catch (InterruptedException ex) {
@@ -245,43 +248,77 @@ public class LogginScreen extends JFrame {
 		lblContrasenha.setBounds(51, 192, 67, 14);
 		lblContrasenha.setName("lblContrasenha");
 
-		lblEmail = new JLabel("Email");
+		lblEmail = new JLabel(rb.getString("LogginScreen.lblEmail.text")); //$NON-NLS-1$
 		lblEmail.setBounds(51, 154, 67, 14);
 		lblEmail.setName("lblEmail");
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(121, 151, 241, 20);
-		textField_3.setColumns(10);
+		txtemail = new JTextField();
+		txtemail.setBounds(121, 151, 241, 20);
+		txtemail.setColumns(10);
 
 		JButton btnConectar = new JButton("Conectar");
 		btnConectar.setBounds(121, 220, 103, 23);
 		btnConectar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*Usuario u = new Usuario();
-				InfoUser iu = new InfoUser(u);
-				iu.setVisible(true);
-				dispose();*/
+				
+				/*if (socketClient != null) {
+					if (!socketClient.isClosed()) {
+						JOptionPane.showMessageDialog(rootPane,
+								"El cliente ya est√° iniciado (desconecte y vuelva a conectar)", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+				}*/
+				lblConexion.setText(rb.getString("lblConexionCon"));
+				encendido = true;
+				try {
+
+					socketClient = new Socket(txtIP.getText(), Integer.parseInt(txtPuerto.getText()));
+					Conexion.ip = txtIP.getText();
+					Conexion.puerto = Integer.parseInt(txtPuerto.getText());
+					//Usuario.miUser(udao.getUser(txtemail.getText(), txtpasswd.getText()));
+					udao.getUser(txtemail.getText(), txtpasswd.getText());
+					if(Usuario.miUser().getEmail() == null) {
+						JOptionPane.showMessageDialog(rootPane, rb.getString("JOUserNotFound"), "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}else {
+					Usuario u = new Usuario();
+					InfoUser iu = new InfoUser();
+					iu.setVisible(true);
+					}
+
+				} catch (Exception ex) {
+					if (ex.getClass().getName().equals("java.net.ConnectException")) {
+						lblConexion.setText(rb.getString("lblConexionDes"));
+						encendido=false;
+						JOptionPane.showMessageDialog(rootPane, rb.getString("JOConexionFallida"), "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
 				
 				
-				ComicsDAO cdao = new ComicsDAO();
-				try { 
+				/*try { 
 					TablaComicScreen tcs = new TablaComicScreen();
 					tcs.setVisible(true);
 					} catch (UnknownHostException e1) {
+						System.out.println("ERROR");
 					  e1.printStackTrace();
 				  } catch (IOException e1){
-					  e1.printStackTrace();
-				  }
+					  JOptionPane.showConfirmDialog(null, rb.getString("JOConexionFallida"),"Error",JOptionPane.CANCEL_OPTION,JOptionPane.ERROR_MESSAGE);
+					  //e1.printStackTrace();
+				  }*/
 				
 			}
 		});
 		btnConectar.setName("btnConectar");
 		btnConectar.setMinimumSize(new Dimension(0, 0));
 
-		lblconexion = new JLabel();
-		lblconexion.setBounds(121, 11, 178, 29);
-		lblconexion.setText("Desconectado");
-		lblconexion.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblConexion = new JLabel();
+		lblConexion.setName("lblConexion");
+		lblConexion.setBounds(121, 11, 178, 29);
+		lblConexion.setText(rb.getString("lblConexionDes"));
+		lblConexion.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton btnChange = new JButton("Cambiar");
 		btnChange.addActionListener(new ActionListener() {
@@ -295,7 +332,7 @@ public class LogginScreen extends JFrame {
 		btnChange.setName("btnChange");
 
 		contentPane.setLayout(null);
-		contentPane.add(lblconexion);
+		contentPane.add(lblConexion);
 		contentPane.add(lblPuerto);
 		contentPane.add(txtPuerto);
 		contentPane.add(lblIP);
@@ -304,15 +341,19 @@ public class LogginScreen extends JFrame {
 		contentPane.add(btnChange);
 		contentPane.add(btnDesconectar);
 		contentPane.add(lblEmail);
-		contentPane.add(textField_3);
+		contentPane.add(txtemail);
 		contentPane.add(lblContrasenha);
 		contentPane.add(btnConectar);
 
 		btnCrearUsuario = new JButton("Crear usuario");
 		btnCrearUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CrearUsuario createuser = new CrearUsuario();
-				createuser.setVisible(true);
+				if(encendido) {
+					CrearUsuario createuser = new CrearUsuario();
+					createuser.setVisible(true);
+				} else {
+					JOptionPane.showConfirmDialog(null, rb.getString("JOConexionFallida"),"Error",JOptionPane.CANCEL_OPTION,JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnCrearUsuario.setName("btnCrearUsuario");
@@ -320,17 +361,17 @@ public class LogginScreen extends JFrame {
 		btnCrearUsuario.setBounds(234, 220, 128, 23);
 		contentPane.add(btnCrearUsuario);
 		listalabels.add(lblPuerto);
-		listalabels.add(lblconexion);
 		listalabels.add(lblIP);
 		listalabels.add(lblContrasenha);
 		listalabels.add(lblEmail);
+		listabotones.add(btnDesconectar);
 		listabotones.add(btnConectar);
 		listabotones.add(btnChange);
 		listabotones.add(btntest);
 		listabotones.add(btnCrearUsuario);
 
-		passwordField = new JPasswordField();
-		passwordField.setBounds(121, 189, 241, 20);
-		contentPane.add(passwordField);
+		txtpasswd = new JPasswordField();
+		txtpasswd.setBounds(121, 189, 241, 20);
+		contentPane.add(txtpasswd);
 	}
 }

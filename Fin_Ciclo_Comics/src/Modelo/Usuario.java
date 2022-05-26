@@ -1,12 +1,28 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Usuario {
+public class Usuario implements Serializable{
 	String email;
 	String contraseña;
-	static byte[] foto;
+	byte[] foto;
+	private static Usuario miUser;
 
+	public static Usuario miUser(String email,String contraseña, byte[] foto) {
+		miUser=new Usuario(email,contraseña,foto);
+		return miUser;
+	}
+	
+	public static Usuario miUser(Usuario u) {
+		miUser=u;
+		return miUser;
+	}
+	 
+	public static Usuario miUser() {
+		 return miUser;
+	}
+	 
 	public Usuario() {
 	}
 
@@ -25,11 +41,11 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getContraseña() {
+	public String getContrasenha() {
 		return contraseña;
 	}
 
-	public void setContraseña(String contraseña) {
+	public void setContrasenha(String contraseña) {
 		this.contraseña = contraseña;
 	}
 

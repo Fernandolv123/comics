@@ -12,7 +12,9 @@ public class TablaComicControlador {
 	public static ArrayList<Comic> sort(String sortCol, String name) {
 		ArrayList<Comic> nuevalista= new ArrayList();
 		for (Comic c: HiloCliente.listaC) {
-			if ((c.getColection().getNombre().equals(sortCol) && c.getNombre().startsWith(name)) || (c.getNombre().startsWith(name)) && sortCol.equals("Todos")) {
+			if ((c.getColection().getNombre().equals(sortCol) && c.getNombre().startsWith(name))) {
+				nuevalista.add(c);
+			}else if(c.getNombre().startsWith(name)  && sortCol.equals("*")) {
 				nuevalista.add(c);
 			}
 		}

@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import Modelo.Comic;
+import Modelo.Usuario;
 
 /**
  *
@@ -31,6 +32,8 @@ public class HiloCliente extends Thread implements Serializable{
     JTextArea txtaoe;
     JLabel lblcon;
     String consulta;
+    byte[] img;
+    public static boolean broke = false;
     public static ArrayList<Comic> listaC=new ArrayList<Comic>();
     
 
@@ -49,6 +52,13 @@ public class HiloCliente extends Thread implements Serializable{
         this.socketCliente = socketCliente;
         this.orden = orden;
         this.consulta = consulta;
+    }
+    
+    public HiloCliente(Socket socketCliente, String orden, String consulta, byte[] img) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.consulta = consulta;
+        this.img = img;
     }
 
     public HiloCliente(Socket socketCliente, String orden, JLabel lblcon) {
@@ -76,10 +86,21 @@ public class HiloCliente extends Thread implements Serializable{
                 
                 //Escribimos la orden que queremos ejecutar
             	System.out.println(orden);
+            	System.out.println(consulta);
                 salida.writeObject(orden);
                 salida.writeObject(consulta);
-                if(orden.equals("getComics")) {
+                switch(orden) {
+                case "getComics":
                 	listaC =  (ArrayList<Comic>) entrada.readObject();
+                	break;
+                case "insertUser":
+                	salida.writeObject(img);
+                	break;
+                case "getUser":
+                	Usuario u =(Usuario) entrada.readObject();
+                	System.out.println(u);
+                	Usuario.miUser(u);
+                	break;
                 }
                 //System.out.println(entrada.readObject());
                 
@@ -116,6 +137,8 @@ public class HiloCliente extends Thread implements Serializable{
                     Logger.getLogger(HiloCliente.class.getName()).log(Level.SEVERE, null, ex1);
                 }
 
+            }  catch (ClassCastException ex) {
+            	broke = true;
             }
         } else {
             txtaoe.setText("No conectado");

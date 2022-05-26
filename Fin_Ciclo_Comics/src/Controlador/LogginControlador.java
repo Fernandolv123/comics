@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 public class LogginControlador {
 	
 
-	public static void traductor(ResourceBundle rb, ArrayList<JLabel> listalabels, ArrayList<JButton> listabotones) {
+	public static void traductor(ResourceBundle rb, ArrayList<JLabel> listalabels, ArrayList<JButton> listabotones, JLabel lblConexion, boolean conectado) {
 		for (JLabel lbl: listalabels) {
 			if(lbl.getName() == null || lbl.getName().equals("")) {
 				
@@ -26,6 +26,12 @@ public class LogginControlador {
 			if(btn != null) {
 				btn.setText(rb.getString(btn.getName()));
 			}
+		}
+		
+		if(conectado){
+			lblConexion.setText(rb.getString("lblConexionCon"));
+		}else {
+			lblConexion.setText(rb.getString("lblConexionDes"));
 		}
 	}
 

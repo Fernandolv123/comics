@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.DatosConexionControlador;
+import Modelo.Usuario;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -49,6 +50,7 @@ public class DatosConexion extends JDialog {
 	 * Create the dialog.
 	 */
 	public DatosConexion(Properties prop) {
+		System.out.println(Usuario.miUser().getEmail());
 		setModal(true);
 		setBounds(100, 100, 197, 184);
 		getContentPane().setLayout(new BorderLayout());

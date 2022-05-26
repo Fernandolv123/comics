@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import BD.UsuariosDAO;
+import Controlador.CrearUsuarioControlador;
 import Modelo.Usuario;
 
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -32,6 +35,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class CrearUsuario extends JDialog {
@@ -48,6 +53,9 @@ public class CrearUsuario extends JDialog {
 	private JPanel panel_2;
 	private JButton btnNewButton;
 	private Usuario u = new Usuario();
+	private ArrayList<JLabel> listalabels = new ArrayList<JLabel>();
+	private ArrayList<JButton> listabotones = new ArrayList<JButton>();
+	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
 
 	/**
 	 * Launch the application.
@@ -66,6 +74,37 @@ public class CrearUsuario extends JDialog {
 	 * Create the dialog.
 	 */
 	public CrearUsuario() {
+		UIManager.put("FileChooser.saveButtonText",rb.getString("btnGuardar"));
+		UIManager.put("FileChooser.openButtonText",rb.getString("btnAbrir"));
+		UIManager.put("FileChooser.cancelButtonText",rb.getString("btncerrar"));
+		UIManager.put("FileChooser.updateButtonText",rb.getString("btnActualizar"));
+		UIManager.put("FileChooser.helpButtonText",rb.getString("btnAyuda"));
+		
+		
+		UIManager.put("FileChooser.lookInLabelText", rb.getString("lblmiraren"));
+		UIManager.put("FileChooser.fileNameLabelText", rb.getString("lblarchivonombre"));
+		UIManager.put("FileChooser.filesOfTypeLabelText", rb.getString("lbltipodearchivos"));
+		UIManager.put("FileChooser.saveInLabelText", rb.getString("lblguardaren"));
+		UIManager.put("FileChooser.openButtonToolTipText", rb.getString("Abrirarchivo"));
+		UIManager.put("FileChooser.cancelButtonToolTipText",rb.getString("btnCancelar"));
+		UIManager.put("FileChooser.saveButtonToolTipText",rb.getString("btnGuardar"));
+		
+		UIManager.put("FileChooser.openButtonToolTipText",rb.getString("btnAbrir"));
+		
+		UIManager.put("FileChooser.upFolderToolTipText", rb.getString("JFsubirunnivel"));
+		
+		UIManager.put("FileChooser.homeFolderToolTipText",rb.getString("JFescritorio"));
+		UIManager.put("FileChooser.newFolderToolTipText",rb.getString("JFnuevofichero"));
+		UIManager.put("FileChooser.listViewButtonToolTipText",rb.getString("JFlista"));
+		UIManager.put("FileChooser.newFolderButtonText",rb.getString("crearficheronuevo"));
+		UIManager.put("FileChooser.renameFileButtonText", rb.getString("nombrararchivo"));
+		UIManager.put("FileChooser.deleteFileButtonText", rb.getString("eliminararchivo"));
+		UIManager.put("FileChooser.detailsViewButtonToolTipText", rb.getString("JFdetails"));
+		UIManager.put("FileChooser.fileSizeHeaderText",rb.getString("JFtamanho"));
+		UIManager.put("FileChooser.fileDateHeaderText", rb.getString("JFfecha"));
+		UIManager.put("FileChooser.fileNameHeaderText", rb.getString("tblNombre"));
+		UIManager.put("FileChooser.fileTypeHeaderText", rb.getString("JFtipo"));
+		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -88,11 +127,11 @@ public class CrearUsuario extends JDialog {
 					gl_panel_10.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_10.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblEmail)
-							.addGap(27)
+							.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addComponent(panel_13, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(txtemail, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+							.addComponent(txtemail, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
 							.addContainerGap())
 				);
 				gl_panel_10.setVerticalGroup(
@@ -124,8 +163,8 @@ public class CrearUsuario extends JDialog {
 							.addComponent(lblContrasenha)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panel_14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(txtpasswd, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtpasswd, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
 							.addContainerGap())
 				);
 				gl_panel_8.setVerticalGroup(
@@ -207,8 +246,10 @@ public class CrearUsuario extends JDialog {
 				btnGuardar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						u.setEmail(txtemail.getText());
-						u.setContraseña(txtpasswd.getText());
+						u.setContrasenha(txtpasswd.getText());
 						if(u.isFormated()) {
+							UsuariosDAO udao = new UsuariosDAO();
+							udao.insertUser(u);
 							dispose();
 						}
 						
@@ -231,6 +272,12 @@ public class CrearUsuario extends JDialog {
 				buttonPane.add(btnCancelar);
 			}
 		}
+		listalabels.add(lblContrasenha);
+		listalabels.add(lblEmail);
+		listalabels.add(lblfoto);
+		listabotones.add(btnCancelar);
+		listabotones.add(btnGuardar);
+		CrearUsuarioControlador.traducir(listalabels,listabotones);
 	}
 
 }
