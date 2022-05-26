@@ -60,11 +60,6 @@ public class UsuariosDAO implements IUsuariosDAO {
 	@Override
 	public void insertUser(Usuario u) {
 		try {
-			System.out.println(
-					":::::::::::");
-			System.out.println(u.getFoto());
-			System.out.println(u.getFoto().length);
-			System.out.println(":::::::::::");
 			socketClient = new Socket(Conexion.ip,Conexion.puerto);
 			//WIP
 			hc = new HiloCliente(socketClient, "insertUser", "insert into usuarios values(\""+u.getEmail()+"\",\""+u.getContrasenha()+"\",?)", u.getFoto());

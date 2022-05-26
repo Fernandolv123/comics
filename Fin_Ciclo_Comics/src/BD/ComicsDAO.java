@@ -53,5 +53,19 @@ public class ComicsDAO implements IComicsDAO{
         hc.join();
         
 	}
+
+	@Override
+	public void insertComic(Comic c) {
+		try {
+		socketClient = new Socket(Conexion.ip,Conexion.puerto);
+		// insert into comics values(/*id_copleccion,nombre,isbn,genero,autor,cantidad,precio,foto,descripcion*/)
+		hc = new HiloCliente(socketClient, "insertUser", "insert into usuarios values(\""+c.getAutor()+"\",\""+c.getAutor()+"\",?)", c.getImg());
+		hc.start();
+		hc.join();
+		} catch (InterruptedException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
