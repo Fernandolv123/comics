@@ -1,0 +1,203 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Vista.Hilos;
+
+import java.io.DataInputStream;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.Socket;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
+import BD.UsuariosDAO;
+import Modelo.Coleccion;
+import Modelo.Comic;
+import Modelo.Transaccion;
+import Modelo.Usuario;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
+/**
+ *
+ * @author fernandolv
+ */
+public class HiloCliente extends Thread implements Serializable{
+
+    Socket socketCliente;
+    String orden;
+    JTextArea txtaoe;
+    JLabel lblcon;
+    String consulta;
+    byte[] img;
+    private UsuariosDAO udao = new UsuariosDAO();
+    public static boolean broke = false;
+    public static ArrayList<Comic> listaC=new ArrayList<Comic>();
+    public static ArrayList<Usuario> listaU=new ArrayList<Usuario>();
+    public static ArrayList<Transaccion> listat=new ArrayList<Transaccion>();
+    
+
+    public HiloCliente() {
+    }
+
+    public HiloCliente(Socket socketCliente, String orden, JTextArea txtaoe, JLabel lblcon) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.txtaoe = txtaoe;
+        this.lblcon = lblcon;
+        
+    }
+    
+    public HiloCliente(Socket socketCliente, String orden, String consulta) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.consulta = consulta;
+    }
+    
+    public HiloCliente(Socket socketCliente, String orden, String consulta, byte[] img) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.consulta = consulta;
+        this.img = img;
+    }
+
+    public HiloCliente(Socket socketCliente, String orden, JLabel lblcon) {
+        this.socketCliente = socketCliente;
+        this.orden = orden;
+        this.lblcon = lblcon;
+        
+    }
+    
+    @Override
+    public void run() {
+    	ObjectInputStream entrada = null;
+        ObjectOutputStream salida = null;
+        //DataInputStream entrada = null;
+        //DataOutputStream salida = null;
+        
+        String opcionsalidaserver;
+        if (socketCliente != null) {
+            try {
+                salida = new ObjectOutputStream(socketCliente.getOutputStream());
+            	entrada = new ObjectInputStream(socketCliente.getInputStream());
+            	salida.writeObject(orden);
+                salida.writeObject(consulta);
+                switch(orden) {
+                case "getComics":
+                	listaC =  (ArrayList<Comic>) entrada.readObject();
+                	break;
+                case "getUsuarios":
+                	listaU = (ArrayList<Usuario>) entrada.readObject();
+                	break;
+                case "insertUser":
+                	salida.writeObject(img);
+                	break;
+                case "getUser":
+                	Usuario u =(Usuario) entrada.readObject();
+                	System.out.println(u);
+                	Usuario.miUser(u);
+                	break;
+                case "insertComic":
+                	salida.writeObject(img);
+                	break;
+                case "informeComics":
+            		try {
+            			JasperReport report = JasperCompileManager.compileReport(consulta);
+            			JasperPrint visor = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(HiloCliente.listaC));
+            			JasperViewer.viewReport(visor, false);
+            		} catch (JRException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+                	break;
+                case "informeUsuarios":
+            		try {
+            			UsuariosDAO udao = new UsuariosDAO();
+            			JasperReport reporte = JasperCompileManager.compileReport(consulta);
+            			JasperPrint visora = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(HiloCliente.listaU));
+            			JasperViewer.viewReport(visora, false);
+            		} catch (JRException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+                	break;
+                case "updateComic":
+                	salida.writeObject(img);
+                	break;
+                case "crearMovimiento":
+                	break;
+                case "getTransacciones":
+                	listat = (ArrayList<Transaccion>) entrada.readObject();
+                	break;
+                case "informeTransacciones":
+            		try {
+            			JasperReport report = JasperCompileManager.compileReport(consulta);
+            			JasperPrint visor = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(HiloCliente.listat));
+            			JasperViewer.viewReport(visor, false);
+            		} catch (JRException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+                	break;
+                }
+                //System.out.println(entrada.readObject());
+                
+                //txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+              //  opcionsalidaserver = entrada.readUTF();
+
+//                switch (opcionsalidaserver) {
+//                    case "svTime":
+//                       // txtaoe.setText(entrada.readUTF());
+//                            txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+//                        break;
+//                    case "svCuantos":
+//                        //txtaoe.setText(entrada.readUTF());
+//                        txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+//                        break;
+//                    case "svSalir":
+//                        //txtaoe.setText(entrada.readUTF());
+//                        txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+//                        break;
+//                    case "svServerClosed":
+//                        //txtaoe.setText(entrada.readUTF());
+//                        txtaoe.setText(txtaoe.getText()+"\n"+entrada.readUTF());
+//                        Thread.currentThread().interrupt();
+//                        break;
+//                }
+
+            } catch (IOException | ClassNotFoundException ex) {
+                try {
+                	ex.printStackTrace();
+                    //lblcon.setText("Desconectado");
+                    //txtaoe.setText("No se ha podido conectar");
+                    socketCliente.close();
+                } catch (IOException ex1) {
+                    Logger.getLogger(HiloCliente.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+
+            }  catch (ClassCastException ex) {
+            	broke = true;
+            }
+        } else {
+            txtaoe.setText("No conectado");
+        }
+    }
+
+}

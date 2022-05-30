@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index version="1.0">
+      <indexitem text="Indice" target="Menu"/>
+      <indexitem text="Iniciar Sesión" target="LogginScreen"/>
+      <indexitem text="Creación de usuarios" target="CrearUsuario"/>
+      <indexitem text="Cambio conexion" target="DatosConexion"/>
+      <indexitem text="Informacion Usuario" target="InfoUsuarios"/>
+      <indexitem text="Generador de Informes" target="InformesPage"/>
+      <indexitem text="Tabla de Comics" target="TableComic"/>
+      <indexitem text="Información Comic" target="InfoComic"/>
+      <indexitem text="Inserción de Productos" target="AddProduct"/>
+</index>

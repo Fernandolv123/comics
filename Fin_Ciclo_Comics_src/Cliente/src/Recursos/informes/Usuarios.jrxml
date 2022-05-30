@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pbUsuarios" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ae9b4cb-182d-4227-9b84-dc6b15ddedc6">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="email" class="java.lang.String"/>
+	<field name="contrasenha" class="java.lang.String"/>
+	<field name="foto" class="byte[]"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="70" y="0" width="100" height="30" uuid="289dc02d-90bd-4262-aa4c-21df95dfecba">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="52d15fef-2b68-4f36-9a65-0ba0fbf0f508"/>
+				</reportElement>
+				<text><![CDATA[email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="0" width="100" height="30" uuid="315aab16-cfdb-4af1-a9fd-02946c92b757">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="95ecb2db-6ad5-4024-92c5-97318fa9952c"/>
+				</reportElement>
+				<text><![CDATA[contrasenha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="0" width="100" height="30" uuid="a534d258-4cad-4a6d-9ca9-ae980ede5a12">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="95ecb2db-6ad5-4024-92c5-97318fa9952c"/>
+				</reportElement>
+				<text><![CDATA[Foto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="180" splitType="Stretch">
+			<textField>
+				<reportElement x="70" y="60" width="100" height="30" uuid="50edb046-fa56-45dc-90b0-87f9a49e15ad">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="52d15fef-2b68-4f36-9a65-0ba0fbf0f508"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="60" width="100" height="30" uuid="8067a274-200b-470c-89fe-d1e5636215cb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="95ecb2db-6ad5-4024-92c5-97318fa9952c"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{contrasenha}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="360" y="0" width="170" height="168" uuid="aae77c1b-5ad2-451a-b6f7-e35b583c86f1"/>
+				<imageExpression><![CDATA[$F{foto}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

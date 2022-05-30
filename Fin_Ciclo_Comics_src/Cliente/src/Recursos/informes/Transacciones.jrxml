@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Transacciones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b23baf1c-8016-4bee-90f9-2b0144e7387f">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="usumail" class="java.lang.String"/>
+	<field name="transaccion" class="java.lang.String"/>
+	<field name="isbncomic" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement x="240" y="36" width="140" height="18" uuid="fe611345-59e6-426d-9009-487c6565fad4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="380" y="36" width="100" height="18" uuid="07b97d77-bd5f-4642-8c1d-eae70a047485"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="100" y="36" width="140" height="18" uuid="29f53f20-67f3-4cf9-b725-6b17937605a3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="100" y="36" width="140" height="18" uuid="ce19a150-7e60-4699-a1a6-c5270feb95ad"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="36" width="140" height="18" uuid="cd3da003-56cd-4bcd-8516-d940cf71e83d"/>
+				<text><![CDATA[Tipo de transaccion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="35" width="100" height="19" uuid="84cc2a4c-1378-4d2f-895b-35afe0813899"/>
+				<text><![CDATA[Comic]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="139" splitType="Stretch">
+			<rectangle>
+				<reportElement x="100" y="0" width="140" height="18" uuid="d3ce2736-e3dd-48af-9858-307597c0aebd"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="240" y="0" width="140" height="18" uuid="7b1cefb5-690e-4cc0-88de-11e470550c42"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="380" y="0" width="100" height="18" uuid="9e4993fe-5b7a-461b-b4be-ee0d8151a1e2"/>
+			</rectangle>
+			<textField>
+				<reportElement x="100" y="0" width="140" height="18" uuid="bc1b9a00-66f4-4ef8-a834-d8eab5b3e6d2"/>
+				<textFieldExpression><![CDATA[$F{usumail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="0" width="140" height="18" uuid="b8d36545-2b34-403d-aa46-5d8312f2a811"/>
+				<textFieldExpression><![CDATA[$F{transaccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="100" height="18" uuid="28b46476-9d7d-4ca1-a62f-0d15597c2ab8"/>
+				<textFieldExpression><![CDATA[$F{isbncomic}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
