@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<toc version="1.0">
+   <tocitem text="Indice" target="Menu">
+      <tocitem text="Inicio de sesión" target="LogginScreen">
+            <tocitem text="Información del Usuario" target="InfoUsuario"/>
+            <tocitem text="Tabla de Comics" target="TableComic">
+            <tocitem text="Información de Comics" target="InfoComic"/>
+            <tocitem text="Inserción de Comics" target="CrearComic"/>
+			</tocitem>
+      </tocitem>
+      <tocitem text="Creación de Usuarios" target="CrearUsuario"/>
+      <tocitem text="Modificador de conexión" target="DatosConexion"/>
+   </tocitem>
+</toc>
