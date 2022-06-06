@@ -2,11 +2,10 @@
 <toc version="1.0">
    <tocitem text="Indice" target="Menu">
       <tocitem text="Inicio de sesión" target="LogginScreen">
-            <tocitem text="Información de Usuario" target="InfoUsuarios"/>
-            <tocitem text="Generador de Informes" target="InformesPage"/>
+            <tocitem text="Información del Usuario" target="InfoUsuario"/>
             <tocitem text="Tabla de Comics" target="TableComic">
             <tocitem text="Información de Comics" target="InfoComic"/>
-            <tocitem text="Inserción de Productos" target="AddProduct"/>
+            <tocitem text="Inserción de Comics" target="CrearComic"/>
 			</tocitem>
       </tocitem>
       <tocitem text="Creación de Usuarios" target="CrearUsuario"/>

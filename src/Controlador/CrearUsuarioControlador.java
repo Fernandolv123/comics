@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
 
 public class CrearUsuarioControlador {
 
@@ -22,6 +24,16 @@ public class CrearUsuarioControlador {
 				btn.setText(rb.getString(btn.getName()));
 			}
 		}
+	}
+
+	public static boolean Corrector(String email, String psswd, String psswdrepeat) {
+		if(!psswd.equals(psswdrepeat)) {
+			JOptionPane.showMessageDialog(null,
+					"La contraseña no es igual", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
 }

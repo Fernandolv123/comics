@@ -38,7 +38,7 @@ public class ComicsDAO implements IComicsDAO{
 
 	public Comic getComic(String valueAt) {
 		for (Comic c : HiloCliente.listaC) {
-			if (c.getISBN().equals(valueAt)) {
+			if (c.getIsbn().equals(valueAt)) {
 				return c;
 			}
 		}
@@ -48,7 +48,7 @@ public class ComicsDAO implements IComicsDAO{
 	public void deleteComic(Comic c) throws InterruptedException, UnknownHostException, IOException {
 		socketClient = new Socket(Conexion.ip,Conexion.puerto);
 		HiloCliente.listaC.remove(c);
-        hc = new HiloCliente(socketClient, "deleteComic", "delete from comics where isbn=\"" + c.getISBN() + "\"");
+        hc = new HiloCliente(socketClient, "deleteComic", "delete from comics where isbn=\"" + c.getIsbn() + "\"");
         hc.start();
         hc.join();
         
@@ -60,7 +60,7 @@ public class ComicsDAO implements IComicsDAO{
 		socketClient = new Socket(Conexion.ip,Conexion.puerto);
 		// insert into comics values(/*id_copleccion,nombre,isbn,genero,autor,cantidad,precio,foto,descripcion*/)
 		// insert into comics values(1,"isbn123","aventuras","Fernando A- Lorenzo Vazquez",32,14.2,?,"descripcion")
-		hc = new HiloCliente(socketClient, "insertComic", "insert into comics values("+c.getColection().getId()+",'"+c.getNombre()+"','"+c.getISBN()+"','"+c.getGnero()+"','"+c.getAutor()+"',"+c.getCantidad()+","+c.getPrecio()+",?,'"+c.getDescripcion()+"')", c.getImg());
+		hc = new HiloCliente(socketClient, "insertComic", "insert into comics values('"+c.getIsbn()+"','"+c.getColection().getId()+"','"+c.getNombre()+"','"+c.getGenero()+"','"+c.getAutor()+"',"+c.getCantidad()+","+c.getPrecio()+",?,'"+c.getDescripcion()+"')", c.getImg());
 		hc.start();
 		hc.join();
 		} catch (InterruptedException | IOException e) {
@@ -74,8 +74,9 @@ public class ComicsDAO implements IComicsDAO{
 		//update comics set nombre = "cambiado",genero = "cambiado" where isbn = "dfdf"
 		
 		try {
+			System.out.println("Haciendo la operacion " + c.getColection().getId());
 		socketClient = new Socket(Conexion.ip,Conexion.puerto);
-		hc = new HiloCliente(socketClient, "insertComic", "update comics set nombre = '"+c.getNombre()+"',genero = '"+c.getGnero()+"',precio = "+c.getPrecio()+",id_coleccion = '"+c.getColection().getId()+"',cantidad = "+c.getCantidad()+",descripcion = '"+c.getDescripcion()+"',foto = ? where isbn = '"+c.getISBN()+"'", c.getImg());
+		hc = new HiloCliente(socketClient, "updateComic", "update comics set nombre = '"+c.getNombre()+"',genero = '"+c.getGenero()+"',precio = "+c.getPrecio()+",id_coleccion = '"+c.getColection().getId()+"',cantidad = "+c.getCantidad()+",descripcion = '"+c.getDescripcion()+"',foto = ? where isbn = '"+c.getIsbn()+"'", c.getImg());
 		hc.start();
 		hc.join();
 		} catch (InterruptedException | IOException e) {

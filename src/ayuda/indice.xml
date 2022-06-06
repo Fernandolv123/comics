@@ -4,9 +4,8 @@
       <indexitem text="Iniciar Sesión" target="LogginScreen"/>
       <indexitem text="Creación de usuarios" target="CrearUsuario"/>
       <indexitem text="Cambio conexion" target="DatosConexion"/>
-      <indexitem text="Informacion Usuario" target="InfoUsuarios"/>
-      <indexitem text="Generador de Informes" target="InformesPage"/>
+      <indexitem text="Informacion del Usuario" target="InfoUsuario"/>
       <indexitem text="Tabla de Comics" target="TableComic"/>
       <indexitem text="Información Comic" target="InfoComic"/>
-      <indexitem text="Inserción de Productos" target="AddProduct"/>
+      <indexitem text="Inserción de Comics" target="CrearComic"/>
 </index>
