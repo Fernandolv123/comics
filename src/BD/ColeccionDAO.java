@@ -18,7 +18,6 @@ public class ColeccionDAO implements IColeccionDAO {
 
 	@Override
 	public void getColeccion(Coleccion col) {
-		ArrayList<String> listas = new ArrayList();
 		for (Coleccion c : HiloCliente.listaCol) {
 			if (c.getNombre().equals(col.getNombre())) {
 				col.setId(c.getId());

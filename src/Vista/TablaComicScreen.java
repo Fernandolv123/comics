@@ -10,7 +10,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 
+import BD.ColeccionDAO;
 import BD.ComicsDAO;
+import Modelo.Coleccion;
 import Modelo.Comic;
 import Vista.Hilos.HiloCliente;
 import Vista.Modelado.TablaComics;
@@ -67,6 +69,7 @@ public class TablaComicScreen extends JDialog {
 	private JPanel panelOculto;
 	private JComboBox cmbCol;
 	private ComicsDAO cdao=new ComicsDAO();
+	private ColeccionDAO coldao=new ColeccionDAO();
 	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
 
 
@@ -92,6 +95,7 @@ public class TablaComicScreen extends JDialog {
 	 * @throws UnknownHostException 
 	 */
 	public TablaComicScreen() throws UnknownHostException, IOException {
+		coldao.getColecciones();
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -117,7 +121,7 @@ public class TablaComicScreen extends JDialog {
 		panel.add(panelOculto, BorderLayout.SOUTH);
 		panelOculto.setLayout(new GridLayout(0, 1, 0, 0));
 
-		btnAnhadirProducto = new JButton("A\u00F1adir Producto");
+		btnAnhadirProducto = new JButton(rb.getString("AnhadirComic"));
 		btnAnhadirProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InfoComic infc = new InfoComic(new Comic());
@@ -150,7 +154,13 @@ public class TablaComicScreen extends JDialog {
 		cmbCol.setModel(new DefaultComboBoxModel(new String[] {"*"}));
 		cmbCol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
+				if(cmbCol.getSelectedIndex() == 0) {
+					tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
+					return;
+				}
+				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(HiloCliente.listaCol.get(cmbCol.getSelectedIndex()-1).getNombre(),txtnombrefiltro.getText())));
+
+				//tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
 			}
 		});
 		panel_1.add(cmbCol);
@@ -171,7 +181,13 @@ public class TablaComicScreen extends JDialog {
 		txtnombrefiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
+				if(cmbCol.getSelectedIndex() == 0) {
+					tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
+					return;
+				}
+				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(HiloCliente.listaCol.get(cmbCol.getSelectedIndex()-1).getNombre(),txtnombrefiltro.getText())));
+
+//				tablaProductos.setModel(new TablaComics(TablaComicControlador.sort(cmbCol.getSelectedItem().toString(),txtnombrefiltro.getText())));
 			}
 		});
 
@@ -204,7 +220,7 @@ public class TablaComicScreen extends JDialog {
 		tablaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(tablaProductos);
 		tablaProductos.setModel(new TablaComics(cdao.obtenerComics()));
-		TablaComicControlador.RellenarCombo(cmbCol);
+		TablaComicControlador.RellenarCombo(cmbCol,rb);
 	}
 
 }

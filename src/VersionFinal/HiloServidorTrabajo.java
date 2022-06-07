@@ -130,7 +130,7 @@ public class HiloServidorTrabajo extends Thread implements Serializable {
                         try {
                             PreparedStatement sentencia = Conexion.getConnection().prepareStatement(consulta);
                             sentencia.executeUpdate();
-                            Conexion.Close();
+                            Conexion.getConnection().close();
                         } catch (SQLException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -144,12 +144,12 @@ public class HiloServidorTrabajo extends Thread implements Serializable {
                         try {
                             PreparedStatement sentencia = Conexion.getConnection().prepareStatement(consulta);
                             byte[] bite = (byte[]) flujo_entrada.readObject();
+                            System.out.println(bite.length);
                             sentencia.setBytes(1,  bite);
                             sentencia.executeUpdate();
+                            Conexion.getConnection().close();
                             Conexion.Close();
                         } catch (SQLException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
                         }
                         ;
                         break;
@@ -241,7 +241,7 @@ public class HiloServidorTrabajo extends Thread implements Serializable {
                             PreparedStatement sentencia = Conexion.getConnection().prepareStatement(consulta);
                             ResultSet resul = sentencia.executeQuery();
                             while (resul.next()) {
-                                listat.add(new Transaccion(resul.getString(1), resul.getString(2), resul.getString(3)));
+                                listat.add(new Transaccion(resul.getString(2), resul.getString(3), resul.getString(4)));
                             }
                             Conexion.Close();
                         } catch (SQLException e) {

@@ -20,6 +20,10 @@ public class UsuariosDAO implements IUsuariosDAO {
 
 	@Override
 	public void getUser(String email, String passwd) throws IOException {
+		
+		/*if(email == null) {
+			throw new IOException();
+		}*/
 		try {
 			socketClient = new Socket(Conexion.ip, Conexion.puerto);
 			if (socketClient == null || !socketClient.isClosed() || !socketClient.isConnected()) {
@@ -30,6 +34,7 @@ public class UsuariosDAO implements IUsuariosDAO {
 			}
 			
 		} catch (InterruptedException ex) {
+			//System.out.println("asd");
 			Logger.getLogger(LogginScreen.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (UnknownHostException e) {
 			//System.out.println("aqui explota");

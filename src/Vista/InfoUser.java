@@ -59,7 +59,6 @@ public class InfoUser extends JDialog {
 	private ResourceBundle rb = ResourceBundle.getBundle("Idiomas.Idioms");
 	private JButton btnExplorar;
 	private JButton btnCancelar;
-	private JPanel panel_5;
 	private JLabel lblInformes;
 	private JLabel lblNewLabel;
 	private InformesDAO iDAO = new InformesDAO();
@@ -67,6 +66,11 @@ public class InfoUser extends JDialog {
 	private TransaccionesDAO tDAO = new TransaccionesDAO();
 	private ComicsDAO cDAO = new ComicsDAO();
 	public static JComboBox cmbtransaccion = new JComboBox();
+	private JButton btninformesusuarios;
+	private JButton btninformecomics;
+	private JButton btninformetransaccioens;
+	private JButton btninformetipot;
+	private JPanel panelfoto;
 
 	/**
 	 * Launch the application.
@@ -91,7 +95,7 @@ public class InfoUser extends JDialog {
 								Image.SCALE_SMOOTH);
 						lblfoto.setIcon(new ImageIcon(imagen));
 					}*/
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 331, 468);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -129,7 +133,7 @@ public class InfoUser extends JDialog {
 						{
 							lblNewLabel = new JLabel("");
 							if (Usuario.miUser().getFoto() != null) {
-								Image imagen = new ImageIcon(Usuario.miUser().getFoto()).getImage().getScaledInstance(84, 84,
+								Image imagen = new ImageIcon(Usuario.miUser().getFoto()).getImage().getScaledInstance(184, 184,
 										Image.SCALE_SMOOTH);
 								lblNewLabel.setIcon(new ImageIcon(imagen));
 							}
@@ -137,16 +141,16 @@ public class InfoUser extends JDialog {
 						}
 					}
 					{
-						JPanel panel_3 = new JPanel();
-						panel_2.add(panel_3, BorderLayout.CENTER);
-						panel_3.setLayout(new BorderLayout(0, 0));
+						panelfoto = new JPanel();
+						panel_2.add(panelfoto, BorderLayout.CENTER);
+						panelfoto.setLayout(new BorderLayout(0, 0));
 						{
 							JLabel lblNewLabel_1 = new JLabel(Usuario.miUser().getEmail());
-							panel_3.add(lblNewLabel_1);
+							panelfoto.add(lblNewLabel_1);
 						}
 						{
 							JPanel panel_4 = new JPanel();
-							panel_3.add(panel_4, BorderLayout.WEST);
+							panelfoto.add(panel_4, BorderLayout.WEST);
 						}
 					}
 				}
@@ -154,12 +158,10 @@ public class InfoUser extends JDialog {
 			{
 				JPanel panel_1 = new JPanel();
 				panel.add(panel_1);
-				{
-					panel_5 = new JPanel();
-				}
 				
-				JButton btnNewButton = new JButton("Comics");
-				btnNewButton.addActionListener(new ActionListener() {
+				btninformecomics = new JButton("Comics");
+				btninformecomics.setName("btninformecomics");
+				btninformecomics.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
 							cDAO.obtenerComics();
@@ -173,8 +175,9 @@ public class InfoUser extends JDialog {
 					}
 				});
 				
-				JButton btnNewButton_1 = new JButton("Usuario");
-				btnNewButton_1.addActionListener(new ActionListener() {
+				btninformesusuarios = new JButton("Usuario");
+				btninformesusuarios.setName("btninformesusuarios");
+				btninformesusuarios.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					try {
 						uDAO.getAllUsers();
@@ -187,16 +190,18 @@ public class InfoUser extends JDialog {
 					}
 				});
 				
-				JButton btnNewButton_2 = new JButton("New button");
-				btnNewButton_2.addActionListener(new ActionListener() {
+				btninformetipot = new JButton("Transacciones tipo");
+				btninformetipot.setName("btninformetipot");
+				btninformetipot.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						tDAO.getTransacciones();
 						iDAO.getInformeTransaccionesPorTipo("./src/Recursos/informes/Transacciones.jrxml");
 					}
 				});
 				
-				JButton btnNewButton_3 = new JButton("Transacciones");
-				btnNewButton_3.addActionListener(new ActionListener() {
+				btninformetransaccioens = new JButton("Tus transacciones");
+				btninformetransaccioens.setName("btninformetransaccioens");
+				btninformetransaccioens.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						tDAO.getTransacciones();
 						iDAO.getInformeTransacciones("./src/Recursos/informes/Transacciones.jrxml");
@@ -213,43 +218,35 @@ public class InfoUser extends JDialog {
 				gl_panel_1.setHorizontalGroup(
 					gl_panel_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addContainerGap()
 							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnNewButton)
-								.addComponent(btnNewButton_1))
-							.addGap(18)
-							.addComponent(lblInformes, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-							.addGap(16)
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addComponent(cmbtransaccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(btnNewButton_2))
-								.addComponent(btnNewButton_3))
-							.addGap(22))
+								.addComponent(btninformetipot, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+								.addComponent(btninformecomics, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+								.addComponent(btninformetransaccioens, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+								.addComponent(btninformesusuarios, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED, 10, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(cmbtransaccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblInformes, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+							.addContainerGap())
 				);
 				gl_panel_1.setVerticalGroup(
-					gl_panel_1.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addContainerGap(14, Short.MAX_VALUE)
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addComponent(btnNewButton_1)
-									.addGap(18))
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addComponent(btnNewButton_3)
-									.addGap(18)))
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnNewButton)
-								.addComponent(cmbtransaccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnNewButton_2))
-							.addContainerGap())
+					gl_panel_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblInformes, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-							.addContainerGap())
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_1.createSequentialGroup()
+									.addComponent(btninformesusuarios, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btninformecomics, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btninformetransaccioens, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+								.addComponent(lblInformes, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btninformetipot, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(cmbtransaccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(47))
 				);
 				cmbtransaccion.setModel(new DefaultComboBoxModel(new String[] {"Insert", "Update", "Delete"}));
 				panel_1.setLayout(gl_panel_1);
@@ -295,6 +292,10 @@ public class InfoUser extends JDialog {
 		}
 		listabotones.add(btnCancelar);
 		listabotones.add(btnExplorar);
+		listabotones.add(btninformetransaccioens);
+		listabotones.add(btninformetipot);
+		listabotones.add(btninformesusuarios);
+		listabotones.add(btninformecomics);
 		listalabels.add(lblSaludo);
 		listalabels.add(lblInformes);
 		InfoUserControler.traducir(listalabels,listabotones);

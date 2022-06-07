@@ -1,6 +1,7 @@
 package Controlador;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -11,10 +12,11 @@ import Vista.Hilos.HiloCliente;
 
 public class InfoComicControlador {
 	
-	public static void RellenarCombo(JComboBox cmbCol) {
-		ArrayList<String> listas= new ArrayList();
+	public static void RellenarCombo(JComboBox cmbCol,ResourceBundle rb) {
+		System.out.println(HiloCliente.listaCol);
 		for (Coleccion c: HiloCliente.listaCol) {
-			cmbCol.addItem(c.getNombre());
+			System.out.println(c.getNombre() +" | "+rb.getString(c.getNombre()));
+			cmbCol.addItem(rb.getString(c.getNombre()));
 		}
 	}
 

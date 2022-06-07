@@ -23,8 +23,8 @@ public class Conexion {
 	static Connection Con;
 	static BasicDataSource basicdatasource = new BasicDataSource();
 	private static String BD = "comic_library";
-        //private static String IP = "localhost";
-	private static String IP = "192.168.56.120";
+        private static String IP = "localhost";
+	//private static String IP = "192.168.56.120";
 
 	/**
 	 * Metodo que crea una conexi�n con los datos existentes en el fichero .properties
@@ -46,7 +46,6 @@ public class Conexion {
 			basicdatasource.setMinIdle(50);
 			basicdatasource.setMaxIdle(100);
 			basicdatasource.setMaxWaitMillis(1000);
-			System.out.println(basicdatasource.getNumActive());
 			
 		} catch (Exception e) {
 			//JOptionPane.showMessageDialog(null, rb.getString("JOdberror"));
@@ -64,12 +63,9 @@ public class Conexion {
 			basicdatasource.setPassword("");
 			basicdatasource.setUrl("jdbc:mariadb://" + IP + ":3306/" + BD);
 			basicdatasource.setValidationQuery("Select 1");
-			basicdatasource.setMaxTotal(5);
 			basicdatasource.setMinIdle(50);
 			basicdatasource.setMaxIdle(100);
 			basicdatasource.setMaxWaitMillis(1000);
-                        System.out.println(basicdatasource.getNumActive());
-
 		} catch (Exception e) {
                         e.printStackTrace();
 			//JOptionPane.showMessageDialog(null, rb.getString("JOdberror"));
@@ -83,7 +79,7 @@ public class Conexion {
 	public static Connection getConnection() throws SQLException {
 		//try {
 		Con = basicdatasource.getConnection();
-		System.out.println("Conexiones activas" + basicdatasource.getNumActive());
+		//System.out.println("Conexiones activas" + basicdatasource.getNumActive());
 		return Con;
 		/*}catch (SQLException e) {
 			return null;

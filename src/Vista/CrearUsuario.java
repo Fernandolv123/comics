@@ -131,18 +131,18 @@ public class CrearUsuario extends JDialog {
 						.addGroup(gl_panel_10.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtemail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE))
+								.addComponent(txtemail, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
 							.addContainerGap())
 				);
 				gl_panel_10.setVerticalGroup(
 					gl_panel_10.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_panel_10.createSequentialGroup()
-							.addContainerGap()
+						.addGroup(gl_panel_10.createSequentialGroup()
+							.addGap(16)
 							.addComponent(lblEmail)
-							.addPreferredGap(ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(txtemail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				);
 				panel_10.setLayout(gl_panel_10);
 			}
@@ -159,18 +159,18 @@ public class CrearUsuario extends JDialog {
 						.addGroup(gl_panel_8.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtpasswd, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
-								.addComponent(lblContrasenha))
+								.addComponent(lblContrasenha)
+								.addComponent(txtpasswd, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE))
 							.addContainerGap())
 				);
 				gl_panel_8.setVerticalGroup(
-					gl_panel_8.createParallelGroup(Alignment.LEADING)
+					gl_panel_8.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_8.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(lblContrasenha)
-							.addGap(18)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtpasswd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addContainerGap(21, Short.MAX_VALUE))
 				);
 				panel_8.setLayout(gl_panel_8);
 			}
@@ -189,18 +189,18 @@ public class CrearUsuario extends JDialog {
 					.addGroup(gl_panel_3.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-							.addComponent(txtpasswdrepeat, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
-							.addComponent(lblContrasenhaRepetir))
+							.addComponent(lblContrasenhaRepetir)
+							.addComponent(txtpasswdrepeat, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE))
 						.addContainerGap())
 			);
 			gl_panel_3.setVerticalGroup(
 				gl_panel_3.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_3.createSequentialGroup()
-						.addContainerGap()
+						.addContainerGap(4, Short.MAX_VALUE)
 						.addComponent(lblContrasenhaRepetir)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(txtpasswdrepeat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(16, Short.MAX_VALUE))
+						.addGap(28))
 			);
 			panel_3.setLayout(gl_panel_3);
 		}

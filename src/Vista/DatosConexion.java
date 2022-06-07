@@ -50,6 +50,7 @@ public class DatosConexion extends JDialog {
 	 * Create the dialog.
 	 */
 	public DatosConexion(Properties prop) {
+		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 197, 184);
 		getContentPane().setLayout(new BorderLayout());

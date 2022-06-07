@@ -59,6 +59,8 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 /**
  * Dialogo de información, creación, actualización y modificación de Productos
@@ -83,10 +85,8 @@ public class InfoComic extends JDialog {
 	private JLabel lblDesc;
 	private JButton cancelButton;
 	private ArrayList<JLabel> listalabel=new ArrayList();
-	private JTextField txtGenero = new JTextField();
 	private JTextField txtNombre = new JTextField();
 	private JTextField txtISBN = new JTextField();
-	private JTextField txtCant = new JTextField();
 	private JComboBox<Coleccion> cmbCol = new JComboBox<Coleccion>();
 	private JLabel lblNombre;
 	private JLabel lblGenero;
@@ -94,6 +94,9 @@ public class InfoComic extends JDialog {
 	private JLabel lblCol;
 	private ComicsDAO cDAO = new ComicsDAO();
 	private TransaccionesDAO tDAO = new TransaccionesDAO();
+	private JSpinner spinnercant = new JSpinner();
+	private JComboBox cmbgen = new JComboBox();
+	private String[] generos= {"Aventuras", "Misterio", "Pelea", "Comedia", "Terror", "Teatro"};
 
 	/**
 	 * Launch the application.
@@ -118,8 +121,17 @@ public class InfoComic extends JDialog {
 	 * 
 	 */
 	public InfoComic(Comic c) {
+		cmbgen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(cmbgen.getSelectedIndex());
+				System.out.println(generos[cmbgen.getSelectedIndex()]);
+			}
+		});
+		cmbgen.setModel(new DefaultComboBoxModel(new String[] {rb.getString("Aventuras"), rb.getString("Misterio"), rb.getString("Pelea"), rb.getString("Comedia"), rb.getString("Terror"), rb.getString("Teatro")}));
+
+		//cmbgen.setModel(new DefaultComboBoxModel(new String[] {"Aventuras", "Misterio", "Pelea", "Comedia", "Terror", "Teatro"}));
 		coldao.getColecciones();
-		InfoComicControlador.RellenarCombo(cmbCol);
+		InfoComicControlador.RellenarCombo(cmbCol,rb);
 		
 		UIManager.put("FileChooser.saveButtonText",rb.getString("btnGuardar"));
 		UIManager.put("FileChooser.openButtonText",rb.getString("btnAbrir"));
@@ -154,7 +166,7 @@ public class InfoComic extends JDialog {
 		//setTitle(rb.getString("TitleInfoProduct"));
 		setModal(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 526, 484);
+		setBounds(100, 100, 526, 517);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -164,7 +176,7 @@ public class InfoComic extends JDialog {
 		/*if(u.getTipo().equals("Administrador")) {
 			panel_ocultar.setVisible(true);
 		}*/
-		
+		spinnercant.setValue(2);
 		if(c.getIsbn() != null) {
 			btnupdate.setText(rb.getString("btnActualizar"));
 			if(c.getImg().length==0) {
@@ -179,13 +191,16 @@ public class InfoComic extends JDialog {
 			txtprecio.setText(c.getPrecio()+"");
 			txtAutor.setText(c.getAutor());
 			txtAutor.setEditable(false);
-			txtCant.setText(c.getCantidad()+"");
-			txtGenero.setText(c.getGenero());
+			//cmbgen.setSelectedItem(c.getGenero().toString());
+			System.out.println("Entra");
+			cmbgen.setSelectedItem(rb.getString(c.getGenero()));
+			//txtCant.setText(c.getCantidad()+"");
+			//txtGenero.setText(c.getGenero());
 			txtISBN.setText(c.getIsbn());
 			txtISBN.setEditable(false);
 			txtNombre.setText(c.getNombre());
 			txtaoedesc.setText(c.getDescripcion());
-			cmbCol.setSelectedItem(c.getColection().getNombre());
+			cmbCol.setSelectedItem(rb.getString(c.getColection().getNombre()));
 			//btnupdate.setText(rb.getString("btnacutalizar"));
 		}else {
 			btnupdate.setText(rb.getString("btnInsertar"));
@@ -239,11 +254,8 @@ public class InfoComic extends JDialog {
 						BufferedImage bImage = ImageIO.read(new File(rutaimagen));
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
 						String[] extension = rutaimagen.toString().trim().split("\\.");
-						System.out.println(extension.length+"\n"+extension[extension.length-1]);
 					    ImageIO.write(bImage, extension[extension.length-1], bos );
 						c.setImg(bos.toByteArray());
-						System.out.println(rutaimagen);
-						System.out.println(c.getImg().length);
 						
 					} catch (IOException e2) {
 						// TODO Auto-generated catch block
@@ -288,20 +300,22 @@ public class InfoComic extends JDialog {
 		btnupdate.setName("btnacutalizar");
 		btnupdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!txtCant.getText().matches("^[0-9]*$") || !txtprecio.getText().matches("^[0-9]+(\\.[0-9]+){0,1}$")) {
+				if(/*!txtCant.getText().matches("^[0-9]*$") || */ !txtprecio.getText().matches("^[0-9]+(\\.[0-9]+){0,1}$")) {
 					JOptionPane.showMessageDialog(rootPane, "Datos introducidos no validos", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				c.setColection(new Coleccion());
-				c.setCantidad(Integer.parseInt(txtCant.getText()));
+				c.setCantidad(Integer.parseInt(""+spinnercant.getValue()));
+				//c.setCantidad(Integer.parseInt(txtCant.getText()));
 				c.setAutor(txtAutor.getText());
-				c.getColection().setNombre(cmbCol.getSelectedItem().toString());
-				c.setGenero(txtGenero.getText());
+				c.setColection(HiloCliente.listaCol.get(cmbCol.getSelectedIndex()));
+				//c.setGenero(txtGenero.getText());
+				c.setGenero(generos[cmbgen.getSelectedIndex()]);
 				c.setNombre(txtNombre.getText());
 				c.setDescripcion(txtaoedesc.getText());
 				c.setPrecio((float) Double.parseDouble(txtprecio.getText()));
-				coldao.getColeccion(c.getColection());
+				//coldao.getColeccion(c.getColection());
 				if(!c.isFormat()) {
 					JOptionPane.showMessageDialog(rootPane, "Datos introducidos no validos", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -338,9 +352,9 @@ public class InfoComic extends JDialog {
 			gl_panel_13.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_13.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblISBN, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addComponent(lblISBN, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
 					.addGap(19))
 		);
 		gl_panel_13.setVerticalGroup(
@@ -367,13 +381,13 @@ public class InfoComic extends JDialog {
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNombre, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtNombre, GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(txtNombre, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap(30, Short.MAX_VALUE)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -394,19 +408,19 @@ public class InfoComic extends JDialog {
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblAutor, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblAutor, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtAutor, GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+					.addComponent(txtAutor, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		gl_panel_4.setVerticalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(20)
+					.addContainerGap(20, Short.MAX_VALUE)
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAutor)
 						.addComponent(txtAutor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(21, Short.MAX_VALUE))
+					.addGap(21))
 		);
 		panel_4.setLayout(gl_panel_4);
 		listalabel.add(lblAutor);
@@ -424,7 +438,8 @@ public class InfoComic extends JDialog {
 		
 		cmbCol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(cmbCol.getSelectedItem());
+				System.out.println(cmbCol.getSelectedIndex());
+				System.out.println(HiloCliente.listaCol.get(cmbCol.getSelectedIndex()));
 			}
 		});
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
@@ -432,10 +447,10 @@ public class InfoComic extends JDialog {
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblprecio, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblprecio, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(txtprecio, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addGap(10)
 					.addComponent(lblCol)
 					.addGap(18)
 					.addComponent(cmbCol, 0, 155, Short.MAX_VALUE)
@@ -446,10 +461,10 @@ public class InfoComic extends JDialog {
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addGap(21)
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtprecio, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblprecio)
 						.addComponent(lblCol)
-						.addComponent(cmbCol, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cmbCol, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtprecio, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblprecio))
 					.addContainerGap(18, Short.MAX_VALUE))
 		);
 		panel_5.setLayout(gl_panel_5);
@@ -457,40 +472,40 @@ public class InfoComic extends JDialog {
 		JPanel panel_5_2 = new JPanel();
 		panel_3.add(panel_5_2);
 		
-		txtGenero.setColumns(10);
-		
 		lblGenero = new JLabel("Genero");
 		lblGenero.setName("tblGenero");
 		
 		lblCant = new JLabel("Cantidad");
-		lblCant.setName("lblCant");
+		lblCant.setName("tblCantidad");
 		
-		txtCant.setColumns(10);
+		spinnercant.setModel(new SpinnerNumberModel(c.getCantidad(), 0, 50, 1));
+		
+		
 		GroupLayout gl_panel_5_2 = new GroupLayout(panel_5_2);
 		gl_panel_5_2.setHorizontalGroup(
 			gl_panel_5_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5_2.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblGenero, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtGenero, GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-					.addGap(18)
+					.addComponent(lblGenero, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(cmbgen, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
 					.addComponent(lblCant, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(txtCant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(spinnercant, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addGap(42))
 		);
 		gl_panel_5_2.setVerticalGroup(
 			gl_panel_5_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5_2.createSequentialGroup()
 					.addGap(21)
-					.addGroup(gl_panel_5_2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblGenero)
-						.addGroup(gl_panel_5_2.createParallelGroup(Alignment.LEADING)
-							.addComponent(txtGenero, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panel_5_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtCant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblCant))))
+					.addGroup(gl_panel_5_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_5_2.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblGenero)
+							.addComponent(cmbgen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_5_2.createParallelGroup(Alignment.BASELINE)
+							.addComponent(spinnercant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblCant)))
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		panel_5_2.setLayout(gl_panel_5_2);
@@ -525,7 +540,13 @@ public class InfoComic extends JDialog {
 		listabotones.add(btnEliminar);
 		listabotones.add(cancelButton);
 		listalabel.add(lblDesc);
+		listalabel.add(lblGenero);
+		listalabel.add(lblNombre);
 		listalabel.add(lblprecio);
+		listalabel.add(lblAutor);
+		listalabel.add(lblCant);
+		listalabel.add(lblCol);
 		ControladorInfoProduct.traducir(listabotones,listalabel,rb);
+		//cmbgen.setSelectedItem("Terror");
 	}
 }

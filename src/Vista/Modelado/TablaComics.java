@@ -26,7 +26,7 @@ import Modelo.Comic;
 public class TablaComics extends AbstractTableModel{
 	private ResourceBundle rb= ResourceBundle.getBundle("Idiomas.Idioms");
 	private ArrayList<Comic> listacomics=null;
-	String[] columnas = {"ISBN",rb.getString("tblNombre"),rb.getString("tblCol"),rb.getString("tblPrecio"),rb.getString("tblCantidad"),rb.getString("tblFoto") };
+	String[] columnas = {"ISBN",rb.getString("tblNombre"),rb.getString("tblCol"),rb.getString("tblGenero"),rb.getString("tblPrecio"),rb.getString("tblCantidad"),rb.getString("tblFoto") };
 	
 	
 	public TablaComics(ArrayList<Comic> listauser) {
@@ -65,12 +65,16 @@ public class TablaComics extends AbstractTableModel{
 			case 1:
 				return c.getNombre();
 			case 2:
-				return c.getColection().getNombre();
+				return rb.getString(c.getColection().getNombre());
+				//return c.getColection().getNombre();
 			case 3:
-				return c.getPrecio()+"€";
+				return rb.getString(c.getGenero());
+				//return c.getGenero();
 			case 4:
-				return c.getCantidad();
+				return c.getPrecio()+"€";
 			case 5:
+				return c.getCantidad();
+			case 6:
 				Image imagen = new ImageIcon(c.getImg()).getImage().getScaledInstance(124, 124, Image.SCALE_SMOOTH);
 				return new ImageIcon(imagen);
 			default:

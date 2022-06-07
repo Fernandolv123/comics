@@ -3,6 +3,7 @@ package Modelo;
 import java.io.Serializable;
 
 public class Transaccion implements Serializable{
+	private int id;
 	private String usumail;
 	private String transaccion;
 	private String isbncomic;
@@ -12,6 +13,14 @@ public class Transaccion implements Serializable{
 		this.usumail = usumail;
 		this.transaccion = transaccion;
 		this.isbncomic = isbncomic;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsumail() {

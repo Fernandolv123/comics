@@ -213,7 +213,7 @@ public class LogginScreen extends JFrame {
 				if (socketClient != null) {
 					if (!socketClient.isClosed()) {
 						JOptionPane.showMessageDialog(rootPane,
-								"El cliente ya est√° iniciado (desconecte y vuelva a conectar)", "Error",
+								rb.getString("JOServerActivo"), "Error",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
@@ -227,7 +227,7 @@ public class LogginScreen extends JFrame {
 					encendido = true;
 					lblConexion.setText(rb.getString("lblConexionCon"));
 
-				} catch (IOException ex /*| Exception ex*/) {
+				} catch (IOException ex /* | Exception ex */) {
 					if (ex.getClass().getName().equals("java.net.ConnectException")) {
 						lblConexion.setText(rb.getString("lblConexionDes"));
 						encendido = false;
@@ -245,10 +245,7 @@ public class LogginScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				if (socketClient == null || !encendido) {
-					JOptionPane.showMessageDialog(rootPane, "El cliente no est· conectado", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				} else if (socketClient.isClosed()) {
-					JOptionPane.showMessageDialog(rootPane, "El cliente ya est· desconectado", "Error",
+					JOptionPane.showMessageDialog(rootPane, rb.getString("JOClienteDesconectado"), "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					try {
@@ -358,29 +355,15 @@ public class LogginScreen extends JFrame {
 		btnCrearUsuario = new JButton("Crear usuario");
 		btnCrearUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
 
-					// Usuario.miUser(udao.getUser(txtemail.getText(), txtpasswd.getText()));
-					udao.getUser(txtemail.getText(), txtpasswd.getText());
-
-
-				//Usuario.miUser(, getName(), null)
-				if (socketClient != null || !lblConexion.getText().equals(rb.getString("lblConexionDes"))) {
-					CrearUsuario createuser = new CrearUsuario();
-					createuser.setVisible(true);
-				} else {
-					JOptionPane.showConfirmDialog(null, rb.getString("JOConexionFallida"), "Error",
-							JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-				}
-				} catch (Exception ex) {
-					if (ex.getClass().getName().equals("java.net.ConnectException")) {
-						lblConexion.setText(rb.getString("lblConexionDes"));
-						encendido = false;
-						socketClient = null;
-						JOptionPane.showMessageDialog(rootPane, rb.getString("JOConexionFallida"), "Error",
-								JOptionPane.ERROR_MESSAGE);
+					if (!lblConexion.getText().equals(rb.getString("lblConexionDes"))) {
+						CrearUsuario createuser = new CrearUsuario();
+						createuser.setVisible(true);
+					} else {
+						JOptionPane.showConfirmDialog(null, rb.getString("JOConexionFallida"), "Error",
+								JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 					}
-				}
+					
 			}
 		});
 		btnCrearUsuario.setName("btnCrearUsuario");

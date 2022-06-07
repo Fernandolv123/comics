@@ -115,7 +115,6 @@ public class HiloCliente extends Thread implements Serializable {
 					break;
 				case "getUser":
 					Usuario u = (Usuario) entrada.readObject();
-					System.out.println(u);
 					Usuario.miUser(u);
 					break;
 				case "insertComic":
